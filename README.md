@@ -1,2 +1,2 @@
-# datastream-bqml-looker-tutorial
- 
+# datastream-tutorial
+ Repository for Datastream + BQML + Looker Tutorial
