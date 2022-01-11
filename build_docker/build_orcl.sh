@@ -203,12 +203,19 @@ check_last_command
 
 ## Only load FASTFRESH schema if parameter -f = Y or = y
 if [ "${FF_BUILD}" = "Y" -o "${FF_BUILD}" = "y" ]; then
-#gcloud compute scp ./oracle_data* ${GCE_INSTANCE_NAME}:~/ --zone=${ZONE} --project=${PROJECT_ID}
-#check_last_command
+gcloud compute scp --recurse ~/datastream-bqml-looker-tutorial ${GCE_INSTANCE_NAME}:~/ --zone=${ZONE} --project=${PROJECT_ID}
+check_last_command
 
 gcloud compute ssh ${GCE_INSTANCE_NAME} --zone=${ZONE} --project=${PROJECT_ID} --quiet << 'EOF'
 DOCKER_ID=`docker ps -a|grep wnameless|grep Up| awk '{print $1}'`
 echo "DOCKER_ID=$DOCKER_ID"
+
+# Copy github files to docker
+docker cp ~/datastream-bqml-looker-tutorial ${DOCKER_ID}:/u01/app/oracle
+
+docker exec -i ${DOCKER_ID} bash << 'EOF1'
+chown -R oracle:dba /u01/app/oracle/datastream-bqml-looker-tutorial 
+EOF1
 
 docker exec -i -e USER=oracle -u oracle ${DOCKER_ID} bash << 'EOF2'
 
