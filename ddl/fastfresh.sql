@@ -1,3 +1,5 @@
+alter database datafile '/u01/app/oracle/oradata/XE/users.dbf' autoextend on maxsize unlimited;
+
 CREATE USER "FASTFRESH" IDENTIFIED BY tutorial_fastfresh
       DEFAULT TABLESPACE "USERS"
       TEMPORARY TABLESPACE "TEMP";

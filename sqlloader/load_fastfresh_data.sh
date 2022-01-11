@@ -1,1 +1,1 @@
-sqlldr CONTROL=oracle_data.ctl skip=1 USERID=fastfresh/<passwd>
+sqlldr CONTROL=oracle_data.ctl skip=1 USERID=fastfresh/tutorial_fastfresh

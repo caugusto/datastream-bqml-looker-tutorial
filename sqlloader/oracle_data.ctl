@@ -1,5 +1,5 @@
 load data 
-infile 'oracle_data.csv' "str '\n'"
+infile '../sample_data/oracle_data.csv' "str '\n'"
 append
 into table FASTFRESH.ORDERS
 fields terminated by ','
