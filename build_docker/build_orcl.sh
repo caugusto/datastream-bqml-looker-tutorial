@@ -128,6 +128,9 @@ echo "Creating a firewall rule allowing SSH to $GCE_INSTANCE_NAME VM ..."
 gcloud compute firewall-rules create "allow-ssh-tutorial-datastream" --allow=tcp:22 --source-ranges="0.0.0.0/0" --project=${PROJECT_ID} --target-tags=${NETWORK_TAG} --network=${NETWORK}
 check_last_command
 
+echo ""
+echo "Warming up firewall rules. Script will continue in 30 seconds ..."
+echo ""
 sleep 30
 
 gcloud compute ssh ${GCE_INSTANCE_NAME} --zone=${ZONE} --project=${PROJECT_ID} --quiet << EOF
@@ -170,6 +173,10 @@ echo ""
 echo "Creating a firewall rule allowing TCP connections to port 1521 on $GCE_INSTANCE_NAME VM ..."
 gcloud compute firewall-rules create "allow-orcl-tutorial-datastream" --allow=tcp:1521 --source-ranges="0.0.0.0/0" --project=${PROJECT_ID} --target-tags=${NETWORK_TAG} --network=${NETWORK}
 check_last_command
+
+echo ""
+echo "Warming up firewall rules. Script will continue in 20 seconds ..."
+echo ""
 sleep 20
 
 
@@ -228,6 +235,9 @@ export ORACLE_SID=XE
 sqlplus / as sysdba << 'EOF3'
 SET ECHO ON
 SET FEEDBACK ON
+
+alter database datafile '/u01/app/oracle/oradata/XE/users.dbf' autoextend on maxsize unlimited;
+
 CREATE USER "FASTFRESH" IDENTIFIED BY tutorial_fastfresh
       DEFAULT TABLESPACE "USERS"
       TEMPORARY TABLESPACE "TEMP";
@@ -251,6 +261,12 @@ TABLESPACE USERS
 ;
 exit;
 EOF3
+
+echo ""
+echo "Will load the FASTFRESH.ORDERS table next ... This will take about 10 minutes to complete ..."
+cd /u01/app/oracle/datastream-bqml-looker-tutorial/sqlloader
+./load_fastfresh_data.sh
+
 EOF2
 EOF
 check_last_command
